@@ -7,9 +7,8 @@ from config import DEBUG  # Importer la config
 app = Flask(__name__)
 # Configuration de CORS
 CORS(app, expose_headers=["Content-Type", "Authorization"], 
-     allow_headers=["Content-Type", "Authorization"],
-     supports_credentials=True,
-     allow_private_network=False)  
+   allow_headers=["Content-Type", "Authorization"],
+   supports_credentials=True)
 
 # Enregistrer les blueprints
 app.register_blueprint(plaid_blueprint, url_prefix='/api')
