@@ -1,4 +1,5 @@
 venv
 .env
 brouillon.txt
-notebooks
+notebooks_brouillon
+
