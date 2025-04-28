@@ -34,7 +34,10 @@ def transactions_api():
         if not access_token:
             return jsonify({"error": "Access token is required"}), 400
             
-        transactions = get_user_transactions(access_token)
+        # Récupérer le paramètre days s'il est fourni
+        days = request.json.get('days', 30)  # Valeur par défaut: 30
+            
+        transactions = get_user_transactions(access_token, days=days)
         return jsonify({"transactions": transactions})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
