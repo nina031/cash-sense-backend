@@ -1,10 +1,8 @@
-from datetime import datetime, timedelta
 from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.products import Products
 from plaid.model.country_code import CountryCode
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
-from plaid.model.transactions_get_request import TransactionsGetRequest
-from utils.plaid_helpers import get_plaid_client, format_transaction
+from utils.plaid_helpers import get_plaid_client
 
 def create_link_token():
     """

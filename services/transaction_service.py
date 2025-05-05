@@ -2,7 +2,6 @@
 Service de gestion des transactions (réelles et de test)
 """
 from datetime import datetime, timedelta
-import uuid
 from services.mode_service import is_demo_mode
 from utils.mock_data import get_mock_transactions
 from plaid.model.transactions_get_request import TransactionsGetRequest
