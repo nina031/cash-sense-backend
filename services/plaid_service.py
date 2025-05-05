@@ -42,26 +42,3 @@ def exchange_public_token(public_token):
         "access_token": access_token,
         "item_id": item_id
     }
-
-def get_user_transactions(access_token, days=30):
-    """
-    Récupère les transactions des X derniers jours
-    """
-    client = get_plaid_client()
-    
-    # Calculer les dates de début et de fin
-    end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=days)
-    
-    # Récupérer les transactions
-    request = TransactionsGetRequest(
-        access_token=access_token,
-        start_date=start_date,
-        end_date=end_date
-    )
-    
-    response = client.transactions_get(request)
-    transactions = response['transactions']
-    
-    # Formater les transactions pour le frontend
-    return [format_transaction(transaction) for transaction in transactions]

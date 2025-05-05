@@ -2,6 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 import os
 from api.plaid_routes import plaid_blueprint
+from api.demo_routes import demo_blueprint
+import config  # Importer les configurations
 
 app = Flask(__name__)
 
@@ -13,11 +15,17 @@ CORS(app, expose_headers=["Content-Type", "Authorization"],
 # Initialiser le mode de l'application
 app.config['APP_MODE'] = 'prod'  # Valeur par défaut: mode production
 
+# Configurer Plaid
+app.config['PLAID_CLIENT_ID'] = config.PLAID_CLIENT_ID
+app.config['PLAID_SECRET'] = config.PLAID_SECRET
+app.config['PLAID_ENV'] = config.PLAID_ENV
+
 # Autres configurations
 app.config['DEBUG'] = os.getenv("FLASK_ENV", "development") != "production"
 
 # Enregistrer les blueprints
 app.register_blueprint(plaid_blueprint, url_prefix='/api')
+app.register_blueprint(demo_blueprint, url_prefix='/api')
 
 @app.route('/')
 def health_check():

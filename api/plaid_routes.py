@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from plaid.model.sandbox_public_token_create_request import SandboxPublicTokenCreateRequest
 from plaid.model.products import Products
-from services.plaid_service import create_link_token, exchange_public_token, get_user_transactions
+from services.plaid_service import create_link_token, exchange_public_token
+from services.transaction_service import get_transactions
 from utils.plaid_helpers import get_plaid_client
 
 
@@ -36,23 +36,8 @@ def transactions_api():
             
         # Récupérer le paramètre days s'il est fourni
         days = request.json.get('days', 30)  # Valeur par défaut: 30
-            
-        transactions = get_user_transactions(access_token, days=days)
+        user_id = request.json.get('user_id', 'default_user')  # ID utilisateur par défaut
+        transactions = get_transactions(user_id, days, access_token)
         return jsonify({"transactions": transactions})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-@plaid_blueprint.route('/create_sandbox_token', methods=['POST'])
-def create_sandbox_token_api():
-    try:
-        institution_id = request.json.get('institution_id', 'ins_1')
-        client = get_plaid_client()
-        
-        request_obj = SandboxPublicTokenCreateRequest(
-            institution_id=institution_id,
-            initial_products=[Products('transactions')]
-        )
-        response = client.sandbox_public_token_create(request_obj)
-        return jsonify({"public_token": response.public_token})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

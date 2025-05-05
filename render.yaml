@@ -9,9 +9,5 @@ services:
         value: sand
       - key: PLAID_CLIENT_ID
         sync: false
-      - key: PLAID_SECRET_sand
-        sync: false
-      - key: PLAID_ENV_sand
-        value: https://sandbox.plaid.com
       - key: PYTHON_VERSION
         value: 3.9.0
