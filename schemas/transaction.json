@@ -1,0 +1,15 @@
+{
+  "id": "string",
+  "date": "string",
+  "merchant_name": "string",
+  "amount": "number",
+  "category": {
+    "id": "string",
+    "subcategory": {
+      "id": "string"
+    }
+  },
+  "payment_channel": "string",
+  "pending": "boolean",
+  "is_test_data": "boolean"
+}

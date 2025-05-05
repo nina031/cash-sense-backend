@@ -1,0 +1,196 @@
+{
+  "foodAndDrink": {
+    "id": "foodAndDrink",
+    "subcategories": {
+      "restaurants": {
+        "id": "restaurants"
+      },
+      "fastFood": {
+        "id": "fastFood"
+      },
+      "bars": {
+        "id": "bars"
+      },
+      "groceries": {
+        "id": "groceries"
+      },
+      "cafe": {
+        "id": "cafe"
+      }
+    }
+  },
+  "shopping": {
+    "id": "shopping",
+    "subcategories": {
+      "clothing": {
+        "id": "clothing"
+      },
+      "electronics": {
+        "id": "electronics"
+      },
+      "sportingGoods": {
+        "id": "sportingGoods"
+      },
+      "homeGoods": {
+        "id": "homeGoods"
+      },
+      "books": {
+        "id": "books"
+      }
+    }
+  },
+  "transport": {
+    "id": "transport",
+    "subcategories": {
+      "publicTransport": {
+        "id": "publicTransport"
+      },
+      "taxi": {
+        "id": "taxi"
+      },
+      "parking": {
+        "id": "parking"
+      },
+      "fuel": {
+        "id": "fuel"
+      },
+      "metro": {
+        "id": "metro"
+      }
+    }
+  },
+  "travel": {
+    "id": "travel",
+    "subcategories": {
+      "flights": {
+        "id": "flights"
+      },
+      "hotels": {
+        "id": "hotels"
+      },
+      "trainTickets": {
+        "id": "trainTickets"
+      },
+      "rentalCar": {
+        "id": "rentalCar"
+      },
+      "activities": {
+        "id": "activities"
+      }
+    }
+  },
+  "transfer": {
+    "id": "transfer",
+    "subcategories": {
+      "bankTransfer": {
+        "id": "bankTransfer"
+      },
+      "internalTransfer": {
+        "id": "internalTransfer"
+      },
+      "deposit": {
+        "id": "deposit"
+      },
+      "withdrawal": {
+        "id": "withdrawal"
+      },
+      "mobilePayment": {
+        "id": "mobilePayment"
+      }
+    }
+  },
+  "payment": {
+    "id": "payment",
+    "subcategories": {
+      "creditCard": {
+        "id": "creditCard"
+      },
+      "bills": {
+        "id": "bills"
+      },
+      "subscription": {
+        "id": "subscription"
+      },
+      "insurance": {
+        "id": "insurance"
+      },
+      "taxes": {
+        "id": "taxes"
+      }
+    }
+  },
+  "health": {
+    "id": "health",
+    "subcategories": {
+      "medical": {
+        "id": "medical"
+      },
+      "pharmacy": {
+        "id": "pharmacy"
+      },
+      "optical": {
+        "id": "optical"
+      },
+      "dental": {
+        "id": "dental"
+      },
+      "fitness": {
+        "id": "fitness"
+      }
+    }
+  },
+  "entertainment": {
+    "id": "entertainment",
+    "subcategories": {
+      "movies": {
+        "id": "movies"
+      },
+      "music": {
+        "id": "music"
+      },
+      "games": {
+        "id": "games"
+      },
+      "sports": {
+        "id": "sports"
+      },
+      "subscriptions": {
+        "id": "subscriptions"
+      }
+    }
+  },
+  "income": {
+    "id": "income",
+    "subcategories": {
+      "salary": {
+        "id": "salary"
+      },
+      "freelance": {
+        "id": "freelance"
+      },
+      "investments": {
+        "id": "investments"
+      },
+      "refunds": {
+        "id": "refunds"
+      },
+      "gifts": {
+        "id": "gifts"
+      }
+    }
+  },
+  "other": {
+    "id": "other",
+    "subcategories": {
+      "unknown": {
+        "id": "unknown"
+      },
+      "fees": {
+        "id": "fees"
+      },
+      "donations": {
+        "id": "donations"
+      }
+    }
+  }
+}
