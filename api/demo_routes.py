@@ -13,9 +13,14 @@ def toggle_demo_mode_api():
     try:
         data = request.json
         enable_demo = data.get('enable_demo', True)
+        user_id = data.get('user_id')
+        
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
         
         # Basculer le mode
         new_mode = toggle_demo_mode(enable_demo)
+        print(f"Mode démo {'activé' if enable_demo else 'désactivé'} par l'utilisateur {user_id}")
         
         return jsonify({
             "success": True,
@@ -23,6 +28,7 @@ def toggle_demo_mode_api():
             "is_demo_mode": is_demo_mode()
         })
     except Exception as e:
+        print(f"Erreur lors du basculement du mode démo: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @demo_blueprint.route('/reset_test_transactions', methods=['POST'])
@@ -32,11 +38,16 @@ def reset_test_transactions_api():
     """
     try:
         data = request.json
-        user_id = data.get('user_id', 'default_user')
+        user_id = data.get('user_id')
+        
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
+            
         days = data.get('days', 30)
         
         # Réinitialiser les transactions de test
         transactions = reset_demo_transactions(user_id, days)
+        print(f"Transactions de test réinitialisées pour l'utilisateur {user_id}")
         
         return jsonify({
             "success": True,
@@ -44,4 +55,5 @@ def reset_test_transactions_api():
             "count": len(transactions)
         })
     except Exception as e:
+        print(f"Erreur lors de la réinitialisation des transactions de test: {str(e)}")
         return jsonify({"error": str(e)}), 500

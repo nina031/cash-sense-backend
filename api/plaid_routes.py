@@ -10,34 +10,34 @@ plaid_blueprint = Blueprint('plaid', __name__)
 @plaid_blueprint.route('/create_link_token', methods=['POST'])
 def link_token_api():
     try:
-        link_token = create_link_token()
+        # Récupérer l'ID utilisateur depuis la requête
+        user_id = request.json.get('user_id')
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
+            
+        link_token = create_link_token(user_id)
         return jsonify({"link_token": link_token})
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
+        print(f"Erreur lors de la création du token de liaison: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @plaid_blueprint.route('/exchange_token', methods=['POST'])
 def exchange_token_api():
     try:
+        # Récupérer les paramètres de la requête
         public_token = request.json.get('public_token')
+        user_id = request.json.get('user_id')
+        
         if not public_token:
             return jsonify({"error": "Public token is required"}), 400
+        
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
             
         result = exchange_public_token(public_token)
         return jsonify(result)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@plaid_blueprint.route('/get_transactions', methods=['POST'])
-def transactions_api():
-    try:
-        access_token = request.json.get('access_token')
-        if not access_token:
-            return jsonify({"error": "Access token is required"}), 400
-            
-        # Récupérer le paramètre days s'il est fourni
-        days = request.json.get('days', 30)  # Valeur par défaut: 30
-        user_id = request.json.get('user_id', 'default_user')  # ID utilisateur par défaut
-        transactions = get_transactions(user_id, days, access_token)
-        return jsonify({"transactions": transactions})
-    except Exception as e:
+        print(f"Erreur lors de l'échange du token: {str(e)}")
         return jsonify({"error": str(e)}), 500

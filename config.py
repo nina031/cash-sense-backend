@@ -11,3 +11,6 @@ load_dotenv()
 PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
 PLAID_SECRET = os.getenv("PLAID_SECRET")
 PLAID_ENV = os.getenv("PLAID_ENV", "development")
+
+# Configuration de la base de données
+DATABASE_URL = os.getenv("DATABASE_URL")
