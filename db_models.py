@@ -7,8 +7,8 @@ db = SQLAlchemy()
 
 class Transaction(db.Model):
     """
-    Modèle pour stocker UNIQUEMENT les transactions de test ou manuelles
-    (pas les transactions provenant directement de Plaid)
+    Modèle pour stocker les transactions de test ou manuelles
+
     """
     __tablename__ = 'transactions'
     

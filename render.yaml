@@ -5,9 +5,7 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app -c gunicorn_config.py
     envVars:
-      - key: PLAID_ENV_MODE
-        value: sand
-      - key: PLAID_CLIENT_ID
-        sync: false
       - key: PYTHON_VERSION
         value: 3.9.0
+      - key: DATABASE_URL
+        sync: false # Cette variable sera configurée manuellement dans le dashboard de Render

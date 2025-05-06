@@ -1,9 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 import os
-from api.plaid_routes import plaid_blueprint
+from api.transaction_routes import transaction_blueprint
 from api.demo_routes import demo_blueprint
-import config  # Importer les configurations
 from models import db  # Importer la base de données
 
 app = Flask(__name__)
@@ -16,13 +15,8 @@ CORS(app, expose_headers=["Content-Type", "Authorization"],
 # Initialiser le mode de l'application
 app.config['APP_MODE'] = 'prod'  # Valeur par défaut: mode production
 
-# Configurer Plaid
-app.config['PLAID_CLIENT_ID'] = config.PLAID_CLIENT_ID
-app.config['PLAID_SECRET'] = config.PLAID_SECRET
-app.config['PLAID_ENV'] = config.PLAID_ENV
-
 # Configuration de la base de données
-app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///cashsense.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialisation de la base de données
@@ -36,7 +30,7 @@ with app.app_context():
 app.config['DEBUG'] = os.getenv("FLASK_ENV", "development") != "production"
 
 # Enregistrer les blueprints
-app.register_blueprint(plaid_blueprint, url_prefix='/api')
+app.register_blueprint(transaction_blueprint, url_prefix='/api')
 app.register_blueprint(demo_blueprint, url_prefix='/api')
 
 @app.route('/')

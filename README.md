@@ -1,285 +1,173 @@
-# Cash Sense Backend
+Cash Sense Backend
+API backend pour l'application de gestion budgétaire Cash Sense. Cette application utilise Flask et fournit une solution simple pour suivre vos dépenses :
 
-API backend pour l'application de gestion budgétaire Cash Sense. Cette application utilise Flask et intègre plusieurs fonctionnalités avancées :
+Mode démo avec des données fictives pour tester l'application
+Mode production avec saisie manuelle des transactions
+Catégorisation des transactions
+Analyses visuelles des dépenses
 
-- Intégration avec l'API Plaid pour récupérer diverses données bancaires
-- Modèles de machine learning pour l'analyse et la catégorisation des transactions
-- Prévisions financières et analyses de tendances
-- Recommandations personnalisées basées sur les habitudes de dépenses
+Fonctionnalités principales
+Gestion des transactions
 
-## Fonctionnalités principales
+Saisie manuelle des transactions
+Mode démo avec données fictives générées automatiquement
+Récupération des transactions par période
+Catégorisation des transactions
 
-### Intégration Plaid
+Analyse de données
 
-- Connexion aux comptes bancaires via Plaid Link
-- Récupération des transactions bancaires en temps réel
-- Accès aux soldes et détails des comptes
-- Support pour les virements et paiements (prévu)
-- Récupération des informations sur les investissements (prévu)
+Visualisation des dépenses par catégorie
+Répartition des revenus et dépenses
+Tendances des dépenses sur le temps
 
-### Machine Learning & Analyse de données
+Autres fonctionnalités
 
-- Catégorisation automatique des transactions avec ML
-- Détection des dépenses inhabituelles
-- Prévisions de flux de trésorerie
-- Identification des opportunités d'épargne
-- Analyse des habitudes de dépenses
+Gestion des objectifs budgétaires (prévu)
+Rapports financiers personnalisés (prévu)
+Notifications et alertes personnalisées (prévu)
+Exportation de données au format CSV/Excel (prévu)
 
-### Autres fonctionnalités
+Prérequis
 
-- Gestion des objectifs budgétaires
-- Rapports financiers personnalisés
-- Notifications et alertes personnalisées
-- Exportation de données au format CSV/Excel
+Python 3.8 ou supérieur
+Base de données (SQLite en développement, PostgreSQL en production)
 
-## Prérequis
+Installation
 
-- Python 3.8 ou supérieur
-- Un compte Plaid avec des clés d'API (sandbox/développement/production)
-- Bibliothèques de data science (pandas, scikit-learn, etc.)
+Clonez le dépôt
 
-## Installation
-
-1. Clonez le dépôt
-
-```bash
-git clone https://github.com/votre-utilisateur/cash-sense-backend.git
+bashgit clone https://github.com/votre-utilisateur/cash-sense-backend.git
 cd cash-sense-backend
-```
 
-2. Créez un environnement virtuel et activez-le
+Créez un environnement virtuel et activez-le
 
-```bash
-python -m venv venv
-source venv/bin/activate  # Sur Windows: venv\Scripts\activate
-```
+bashpython -m venv venv
+source venv/bin/activate # Sur Windows: venv\Scripts\activate
 
-3. Installez les dépendances
+Installez les dépendances
 
-```bash
-pip install -r requirements.txt
-```
+bashpip install -r requirements.txt
 
-4. Créez un fichier `.env` à la racine du projet
+Créez un fichier .env à la racine du projet
 
-```
-# Mode d'environnement (sand, dev, prod)
-PLAID_ENV_MODE=sand
-
-# ID Client
-PLAID_CLIENT_ID=your_client_id
-
-# Sandbox
-PLAID_SECRET_sand=your_sandbox_secret
-PLAID_ENV_sand=https://sandbox.plaid.com
-
-# Développement
-PLAID_SECRET_dev=your_dev_secret
-PLAID_ENV_dev=https://development.plaid.com
-
-# Production
-PLAID_SECRET_prod=your_prod_secret
-PLAID_ENV_prod=https://production.plaid.com
-
-# Configuration de la base de données
-DB_URI=sqlite:///cashsense.db  # ou votre URL de BDD
-```
-
-## Structure du projet
-
-```
+Structure du projet
 cash-sense-backend/
 │
-├── app.py                 # Point d'entrée principal de l'application
-├── config.py              # Configuration centralisée
-├── .env                   # Variables d'environnement (non commité)
-├── requirements.txt       # Dépendances du projet
+├── app.py # Point d'entrée principal de l'application
+├── config.py # Configuration centralisée
+├── .env # Variables d'environnement (non commité)
+├── requirements.txt # Dépendances du projet
 │
-├── api/                   # Routes API
-│   ├── __init__.py
-│   ├── plaid_routes.py    # Routes liées à Plaid
-│   ├── ml_routes.py       # Routes liées au machine learning
-│   ├── budgets_routes.py  # Routes liées aux budgets
-│   └── reports_routes.py  # Routes liées aux rapports
+├── api/ # Routes API
+│ ├── **init**.py
+│ ├── transaction_routes.py # Routes liées aux transactions
+│ ├── demo_routes.py # Routes liées au mode démo
+│ └── reports_routes.py # Routes liées aux rapports
 │
-├── services/              # Logique métier
-│   ├── __init__.py
-│   ├── plaid_service.py   # Service pour interagir avec l'API Plaid
-│   ├── ml_service.py      # Service pour les prédictions ML
-│   └── analysis_service.py # Service pour l'analyse des données
+├── services/ # Logique métier
+│ ├── **init**.py
+│ ├── transaction_service.py # Service pour gérer les transactions
+│ ├── mode_service.py # Service pour gérer les modes de l'application
+│ └── analysis_service.py # Service pour l'analyse des données
 │
-├── models/                # Modèles de données et ML
-│   ├── __init__.py
-│   ├── db_models.py       # Modèles de base de données
-│   ├── transaction_classifier.py # Modèle de classification des transactions
-│   └── spending_predictor.py    # Modèle de prédiction des dépenses
+├── models/ # Modèles de données
+│ ├── **init**.py
+│ └── db_models.py # Modèles de base de données
 │
-├── utils/                 # Fonctions utilitaires
-│   ├── __init__.py
-│   ├── plaid_helpers.py   # Helpers pour Plaid
-│   └── data_processing.py # Traitement des données
+├── utils/ # Fonctions utilitaires
+│ ├── **init**.py
+│ ├── transaction_validator.py # Validation des transactions
+│ ├── mock_data.py # Génération de données fictives
+│ └── schema_loader.py # Chargement des schémas JSON
 │
-├── data/                  # Dossier pour les données et modèles entraînés
-│   ├── models/            # Modèles ML entraînés
-│   └── training/          # Données d'entraînement
+├── schemas/ # Schémas JSON pour la validation
+│ ├── transaction.json # Schéma de transaction
+│ └── categories.json # Schéma des catégories
 │
-├── notebooks/             # Notebooks Jupyter pour l'analyse et le développement ML
-│   ├── retreive_data_plaid.ipynb
-│   ├── transaction_categorization.ipynb
-│   └── spending_prediction.ipynb
-│
-└── migrations/            # Migrations de base de données (si utilisé)
-```
+└── migrations/ # Migrations de base de données (si utilisé)
+Exécution
+bashpython app.py
+L'API sera disponible à http://localhost:5000.
+Endpoints API
+Système
 
-## Exécution
+GET / : Vérifie si l'API est en cours d'exécution
 
-```bash
-python app.py
-```
+Transactions
 
-L'API sera disponible à `http://localhost:5000`.
+POST /api/get_transactions : Récupère les transactions de l'utilisateur
+POST /api/add_transaction : Ajoute une transaction manuelle
 
-## Endpoints API
+Mode démo
 
-### Système
+POST /api/toggle_demo_mode : Active ou désactive le mode démo
+POST /api/reset_test_transactions : Réinitialise les transactions de test
 
-- **GET /** : Vérifie si l'API est en cours d'exécution
+Exemples d'utilisation avec curl
+Activer le mode démo
+bashcurl -X POST http://localhost:5000/api/toggle_demo_mode \
+ -H "Content-Type: application/json" \
+ -d '{"enable_demo": true, "user_id": "demo_user"}'
+Récupérer les transactions
+bashcurl -X POST http://localhost:5000/api/get_transactions \
+ -H "Content-Type: application/json" \
+ -d '{"user_id": "votre_user_id", "days": 30}'
+Ajouter une transaction manuelle
+bashcurl -X POST http://localhost:5000/api/add_transaction \
+ -H "Content-Type: application/json" \
+ -d '{
+"user_id": "votre_user_id",
+"transaction": {
+"date": "2025-05-01",
+"merchant_name": "Carrefour",
+"amount": 52.30,
+"category": {
+"id": "foodAndDrink",
+"subcategory": {
+"id": "groceries"
+}
+},
+"payment_channel": "in store"
+}
+}'
+Modes d'application
+L'application peut fonctionner dans deux modes :
 
-### Plaid API
+Mode production : Les utilisateurs doivent saisir manuellement leurs transactions
+Mode démo : Des données fictives sont générées pour tester les fonctionnalités
 
-- **POST /api/create_link_token** : Crée un token de liaison pour initialiser Plaid Link
-- **POST /api/exchange_token** : Échange un token public contre un token d'accès
-- **POST /api/get_transactions** : Récupère les transactions bancaires
-- **POST /api/get_accounts** : Récupère les informations des comptes
-- **POST /api/get_balances** : Récupère les soldes actuels des comptes
-- **POST /api/get_investments** : Récupère les données d'investissement (prévu)
+Pour changer de mode, utilisez l'endpoint /api/toggle_demo_mode.
+Sécurité
 
-### Machine Learning
+Ne jamais commiter le fichier .env contenant vos informations sensibles
+En production, implémentez un système d'authentification robuste
+Chiffrez les données sensibles dans la base de données
+Utilisez HTTPS en production
 
-- **POST /api/categorize_transaction** : Catégorise une transaction avec le modèle ML
-- **POST /api/predict_expenses** : Prédit les dépenses futures
-- **POST /api/detect_anomalies** : Détecte les transactions inhabituelles
-- **GET /api/retrain_models** : Déclenche un réentraînement des modèles
-
-### Budgets & Rapports
-
-- **GET /api/budget_summary** : Récupère le résumé du budget
-- **POST /api/set_budget_goal** : Définit un objectif budgétaire
-- **GET /api/spending_report** : Génère un rapport de dépenses
-- **GET /api/savings_opportunities** : Identifie les opportunités d'épargne
-
-### Endpoints de développement/test
-
-- **POST /api/create_sandbox_token** : Crée un token public sandbox pour les tests
-
-## Exemples d'utilisation avec curl
-
-### Créer un token de liaison
-
-```bash
-curl -X POST http://localhost:5000/api/create_link_token \
-  -H "Content-Type: application/json"
-```
-
-### Créer un token public sandbox (pour les tests)
-
-```bash
-curl -X POST http://localhost:5000/api/create_sandbox_token \
-  -H "Content-Type: application/json" \
-  -d '{"institution_id": "ins_1"}'
-```
-
-### Échanger un token public contre un token d'accès
-
-```bash
-curl -X POST http://localhost:5000/api/exchange_token \
-  -H "Content-Type: application/json" \
-  -d '{"public_token": "votre_public_token"}'
-```
-
-### Récupérer les transactions
-
-```bash
-curl -X POST http://localhost:5000/api/get_transactions \
-  -H "Content-Type: application/json" \
-  -d '{"access_token": "votre_access_token"}'
-```
-
-### Catégoriser une transaction avec ML
-
-```bash
-curl -X POST http://localhost:5000/api/categorize_transaction \
-  -H "Content-Type: application/json" \
-  -d '{"description": "CARREFOUR", "amount": 52.30}'
-```
-
-## Changement d'environnement
-
-Pour changer d'environnement (sandbox, développement, production), modifiez la variable `PLAID_ENV_MODE` dans le fichier `.env` ou passez-la en variable d'environnement au lancement :
-
-```bash
-PLAID_ENV_MODE=prod python app.py
-```
-
-## Modèles de Machine Learning
-
-### Catégorisation des transactions
-
-- Utilise un modèle de classification supervisée (RandomForest, XGBoost)
-- Entraîné sur l'historique des transactions catégorisées
-- Prend en compte la description, le montant et d'autres métadonnées
-
-### Prédiction des dépenses
-
-- Modèle de série temporelle pour prédire les dépenses futures
-- Analyse les tendances saisonnières et les cycles récurrents
-- Génère des prévisions de dépenses par catégorie
-
-### Recommandations d'épargne
-
-- Analyse les habitudes de dépenses et identifie les opportunités d'optimisation
-- Suggère des ajustements budgétaires basés sur l'historique
-
-## Sécurité
-
-- Ne jamais commiter le fichier `.env` contenant vos clés d'API
-- En production, stockez les tokens d'accès de manière sécurisée
-- Implémentez un système d'authentification pour sécuriser votre API
-- Chiffrez les données sensibles dans la base de données
-- Utilisez HTTPS en production
-
-## Déploiement
-
-### Sur un serveur
-
-```bash
-# Installer gunicorn
+Déploiement
+Sur un serveur
+bash# Installer gunicorn
 pip install gunicorn
 
 # Lancer avec gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
 
-### Avec Docker
+gunicorn -w 4 -b 0.0.0.0:5000 app:app -c gunicorn_config.py
+Avec Render
+Le projet inclut un fichier render.yaml pour un déploiement facile sur Render.com.
+Prochaines fonctionnalités (v2)
 
-Un Dockerfile est inclus pour faciliter le déploiement.
+Intégration avec des APIs bancaires pour la synchronisation automatique
+Catégorisation automatique des transactions
+Prévisions de dépenses
+Suggestions d'économies
 
-```bash
-# Construire l'image
-docker build -t cash-sense-backend .
+Contribution
 
-# Exécuter le conteneur
-docker run -p 5000:5000 -d cash-sense-backend
-```
+Forkez le projet
+Créez votre branche de fonctionnalité (git checkout -b feature/nouvelle-fonctionnalite)
+Committez vos changements (git commit -m 'Ajout d'une nouvelle fonctionnalité')
+Poussez vers la branche (git push origin feature/nouvelle-fonctionnalite)
+Ouvrez une Pull Request
 
-## Contribution
-
-1. Forkez le projet
-2. Créez votre branche de fonctionnalité (`git checkout -b feature/nouvelle-fonctionnalite`)
-3. Committez vos changements (`git commit -m 'Ajout d'une nouvelle fonctionnalité'`)
-4. Poussez vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
-5. Ouvrez une Pull Request
-
-## Licence
-
+Licence
 Ce projet est sous licence MIT.

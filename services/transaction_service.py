@@ -1,26 +1,23 @@
 """
-Service de gestion des transactions (réelles et de test)
+Service de gestion des transactions (manuelles et de test)
 """
 from datetime import datetime, timedelta
 from services.mode_service import is_demo_mode
 from utils.mock_data import get_mock_transactions
-from plaid.model.transactions_get_request import TransactionsGetRequest
-from utils.plaid_helpers import get_plaid_client
 from utils.transaction_validator import format_transaction
 from models import db, Transaction
 import json
 import uuid
 
-def get_transactions(user_id, days=30, access_token=None):
+def get_transactions(user_id, days=30):
     """
     Récupère les transactions pour un utilisateur.
     En mode demo, utilise les données générées.
-    En mode prod, utilise Plaid ou les transactions de la base de données.
+    En mode prod, utilise les transactions manuelles de la base de données.
     
     Args:
         user_id (str): Identifiant de l'utilisateur
         days (int, optional): Nombre de jours de transactions à récupérer
-        access_token (str, optional): Token d'accès Plaid (en mode prod)
         
     Returns:
         list: Liste des transactions
@@ -36,15 +33,9 @@ def get_transactions(user_id, days=30, access_token=None):
     if is_demo_mode():
         # Récupérer les transactions de test
         return get_demo_transactions(user_id, days)
-    
-    # Mode prod
-    if access_token:
-        # En production, utilisez Plaid
-        return get_plaid_transactions(access_token, days, user_id)
-    
-    # Si aucun token d'accès n'est fourni, on pourrait récupérer les transactions
-    # manuelles depuis la base de données
-    return get_manual_transactions(user_id, days)
+    else :
+    # Mode prod - récupérer les transactions manuelles depuis la base de données
+        return get_manual_transactions(user_id, days)
 
 def get_demo_transactions(user_id, days=30):
     """
@@ -105,47 +96,6 @@ def get_demo_transactions(user_id, days=30):
     result.sort(key=lambda x: x["date"], reverse=True)
     
     return result
-
-def get_plaid_transactions(access_token, days=30, user_id=None):
-    """
-    Récupère les transactions depuis Plaid (sans les stocker en base de données)
-    
-    Args:
-        access_token (str): Token d'accès Plaid
-        days (int): Nombre de jours de transactions à récupérer
-        user_id (str): Identifiant de l'utilisateur (pour journalisation uniquement)
-        
-    Returns:
-        list: Liste des transactions
-    """
-    client = get_plaid_client()
-    
-    # Calculer les dates de début et de fin
-    end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=days)
-    
-    # Récupérer les transactions
-    try:
-        request = TransactionsGetRequest(
-            access_token=access_token,
-            start_date=start_date,
-            end_date=end_date
-        )
-        
-        response = client.transactions_get(request)
-        plaid_transactions = response['transactions']
-        
-        # Journaliser l'accès aux données
-        if user_id:
-            print(f"Récupéré {len(plaid_transactions)} transactions Plaid pour l'utilisateur {user_id}")
-        
-        # Formater toutes les transactions pour l'API sans les stocker
-        return [format_transaction(tx) for tx in plaid_transactions]
-    
-    except Exception as e:
-        print(f"Erreur lors de la récupération des transactions Plaid: {str(e)}")
-        # En cas d'erreur, retourner une liste vide
-        return []
 
 def get_manual_transactions(user_id, days=30):
     """
