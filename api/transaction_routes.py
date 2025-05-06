@@ -1,6 +1,7 @@
 # api/transaction_routes.py
 from flask import Blueprint, request, jsonify
 from services.transaction_service import get_transactions, add_transaction
+from utils.auth_utils import require_valid_user
 import logging
 
 # Configuration du logger
@@ -9,6 +10,7 @@ logger = logging.getLogger(__name__)
 transaction_blueprint = Blueprint('transaction', __name__)
 
 @transaction_blueprint.route('/get_transactions', methods=['POST'])
+@require_valid_user
 def get_transactions_api():
     """
     Récupère les transactions pour un utilisateur
@@ -18,9 +20,6 @@ def get_transactions_api():
         # Récupérer et valider les paramètres requis
         user_id = request.json.get('user_id')
         
-        if not user_id:
-            return jsonify({"error": "User ID is required"}), 400
-            
         # Récupérer le paramètre days s'il est fourni
         days = request.json.get('days', 30)  # Valeur par défaut: 30
         
@@ -34,6 +33,7 @@ def get_transactions_api():
         return jsonify({"error": str(e)}), 500
 
 @transaction_blueprint.route('/add_transaction', methods=['POST'])
+@require_valid_user
 def add_transaction_api():
     """
     Ajoute une transaction manuelle pour un utilisateur
@@ -43,9 +43,6 @@ def add_transaction_api():
         user_id = request.json.get('user_id')
         transaction_data = request.json.get('transaction')
         
-        if not user_id:
-            return jsonify({"error": "User ID is required"}), 400
-            
         if not transaction_data:
             return jsonify({"error": "Transaction data is required"}), 400
         

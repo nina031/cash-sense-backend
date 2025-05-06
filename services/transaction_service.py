@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from services.mode_service import is_demo_mode
 from utils.mock_data import get_mock_transactions
 from utils.transaction_validator import format_transaction
-from models import db, Transaction
+from db_models import db, Transaction
 import json
 import uuid
 

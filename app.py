@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 from api.transaction_routes import transaction_blueprint
 from api.demo_routes import demo_blueprint
-from models import db  # Importer la base de données
+from db_models import db  # Importer la base de données
 
 app = Flask(__name__)
 
@@ -16,7 +16,8 @@ CORS(app, expose_headers=["Content-Type", "Authorization"],
 app.config['APP_MODE'] = 'prod'  # Valeur par défaut: mode production
 
 # Configuration de la base de données
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///cashsense.db')
+database_url = os.getenv('DATABASE_URL', 'sqlite:///cashsense.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialisation de la base de données

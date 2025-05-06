@@ -1,40 +1,50 @@
-# models.py (version modifiée)
+# db_models.py
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
 
 db = SQLAlchemy()
 
+
+class User(db.Model):
+    """
+    Modèle pour les utilisateurs
+    """
+    __tablename__ = 'User'
+    
+    id = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.String(100), nullable=True)
+    email = db.Column(db.String(255), unique=True, nullable=True)
+    emailVerified = db.Column(db.DateTime, nullable=True)
+    password = db.Column(db.String(255), nullable=True)
+    image = db.Column(db.String(255), nullable=True)
+    createdAt = db.Column(db.DateTime, default=datetime.utcnow)
+    updatedAt = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 class Transaction(db.Model):
     """
     Modèle pour stocker les transactions de test ou manuelles
-
     """
-    __tablename__ = 'transactions'
+    __tablename__ = 'Transaction'  # Nom de table tel que défini par Prisma (avec majuscule)
     
-    # Champs de base définis par TRANSACTION_SCHEMA
     id = db.Column(db.String(36), primary_key=True)
     date = db.Column(db.String(10), nullable=False)
-    merchant_name = db.Column(db.String(100))
+    merchantName = db.Column(db.String(100))  # Adaptez les noms de champs à ceux de Prisma
     amount = db.Column(db.Float, nullable=False)
-    payment_channel = db.Column(db.String(50))
+    paymentChannel = db.Column(db.String(50))
     pending = db.Column(db.Boolean, default=False)
     
-    # Champs additionnels pour notre application
-    user_id = db.Column(db.String(36), nullable=False, index=True)
+    userId = db.Column(db.String(36), db.ForeignKey('User.id'), nullable=False)  # Avec majuscule pour User
     category = db.Column(db.String(100))
     subcategory = db.Column(db.String(100))
     
-    # Distinguer les types de transactions
-    is_test_data = db.Column(db.Boolean, default=False)  # True = mode démo
-    is_manual = db.Column(db.Boolean, default=False)     # True = créée manuellement
+    isTestData = db.Column(db.Boolean, default=False)
+    isManual = db.Column(db.Boolean, default=False)
     
-    # Stockage JSON complet pour préserver toutes les données
-    raw_data = db.Column(db.Text, nullable=True)
+    rawData = db.Column(db.Text, nullable=True)
     
-    # Métadonnées
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    createdAt = db.Column(db.DateTime, default=datetime.utcnow)
+    updatedAt = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     
     def to_dict(self):
@@ -60,3 +70,4 @@ class Transaction(db.Model):
             "is_test_data": self.is_test_data,
             "is_manual": self.is_manual
         }
+    
