@@ -49,17 +49,17 @@ class Transaction(db.Model):
     
     def to_dict(self):
         """Convertit le modèle en dictionnaire pour l'API"""
-        if self.raw_data:
+        if self.rawData:
             # Si nous avons des données brutes stockées, les utiliser
-            return json.loads(self.raw_data)
+            return json.loads(self.rawData)
         
         # Sinon, construire un dictionnaire à partir des champs individuels
         return {
             "id": self.id,
             "date": self.date,
             "amount": self.amount,
-            "merchant_name": self.merchant_name,
-            "payment_channel": self.payment_channel or ("online" if self.amount < 0 else "in store"),
+            "merchant_name": self.merchantName,  # Correspondance avec le nom du champ dans la BD
+            "payment_channel": self.paymentChannel or ("online" if self.amount < 0 else "in store"),
             "pending": self.pending,
             "category": {
                 "id": self.category,
@@ -67,7 +67,6 @@ class Transaction(db.Model):
                     "id": self.subcategory
                 }
             },
-            "is_test_data": self.is_test_data,
-            "is_manual": self.is_manual
+            "is_test_data": self.isTestData,  # Correspondance avec le nom du champ dans la BD
+            "is_manual": self.isManual  # Correspondance avec le nom du champ dans la BD
         }
-    

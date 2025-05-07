@@ -53,8 +53,8 @@ def get_demo_transactions(user_id, days=30):
     
     # Vérifier si nous avons déjà des transactions de test pour cet utilisateur
     transactions_count = Transaction.query.filter_by(
-        user_id=user_id, 
-        is_test_data=True
+        userId=user_id, 
+        isTestData=True
     ).count()
     
     if transactions_count == 0:
@@ -66,17 +66,17 @@ def get_demo_transactions(user_id, days=30):
             # Créer une nouvelle transaction
             transaction = Transaction(
                 id=tx_data.get("id", f"tx_{uuid.uuid4().hex}"),
-                user_id=user_id,
+                userId=user_id,
                 amount=tx_data.get("amount", 0),
                 date=tx_data.get("date", datetime.now().strftime("%Y-%m-%d")),
-                merchant_name=tx_data.get("merchant_name", "Unknown"),
-                payment_channel=tx_data.get("payment_channel", ""),
+                merchantName=tx_data.get("merchant_name", "Unknown"),
+                paymentChannel=tx_data.get("payment_channel", ""),
                 pending=tx_data.get("pending", False),
                 category=tx_data.get("category", {}).get("id", "other"),
                 subcategory=tx_data.get("category", {}).get("subcategory", {}).get("id", "unknown"),
-                is_test_data=True,
-                is_manual=False,
-                raw_data=json.dumps(tx_data)
+                isTestData=True,
+                isManual=False,
+                rawData=json.dumps(tx_data)
             )
             db.session.add(transaction)
         
@@ -85,8 +85,8 @@ def get_demo_transactions(user_id, days=30):
     
     # Récupérer toutes les transactions de test pour cet utilisateur
     transactions = Transaction.query.filter_by(
-        user_id=user_id, 
-        is_test_data=True
+        userId=user_id, 
+        isTestData=True
     ).all()
     
     # Convertir en format API
@@ -128,16 +128,16 @@ def get_stored_transactions(user_id, days=30, is_test_data=None, is_manual=None)
     
     # Construire la requête
     query = Transaction.query.filter(
-        Transaction.user_id == user_id,
+        Transaction.userId == user_id,
         Transaction.date >= min_date
     )
     
     # Appliquer les filtres supplémentaires si spécifiés
     if is_test_data is not None:
-        query = query.filter(Transaction.is_test_data == is_test_data)
+        query = query.filter(Transaction.isTestData == is_test_data)
     
     if is_manual is not None:
-        query = query.filter(Transaction.is_manual == is_manual)
+        query = query.filter(Transaction.isManual == is_manual)
     
     # Exécuter la requête
     transactions = query.all()
@@ -176,17 +176,17 @@ def add_transaction(user_id, transaction_data, is_test=False, is_manual=True):
     # Créer une nouvelle transaction
     transaction = Transaction(
         id=formatted_tx.get("id"),
-        user_id=user_id,
+        userId=user_id,
         amount=formatted_tx.get("amount", 0),
         date=formatted_tx.get("date"),
-        merchant_name=formatted_tx.get("merchant_name"),
-        payment_channel=formatted_tx.get("payment_channel"),
+        merchantName=formatted_tx.get("merchant_name"),
+        paymentChannel=formatted_tx.get("payment_channel"),
         pending=formatted_tx.get("pending", False),
         category=formatted_tx.get("category", {}).get("id", "other"),
         subcategory=formatted_tx.get("category", {}).get("subcategory", {}).get("id", "unknown"),
-        is_test_data=is_test,
-        is_manual=is_manual,
-        raw_data=json.dumps(formatted_tx)
+        isTestData=is_test,
+        isManual=is_manual,
+        rawData=json.dumps(formatted_tx)
     )
     
     # Ajouter à la base de données
@@ -211,9 +211,9 @@ def reset_demo_transactions(user_id, days=30):
     
     # Supprimer toutes les transactions de test automatiques (non manuelles)
     Transaction.query.filter_by(
-        user_id=user_id, 
-        is_test_data=True,
-        is_manual=False
+        userId=user_id, 
+        isTestData=True,
+        isManual=False
     ).delete()
     
     # Générer de nouvelles transactions de test
@@ -223,17 +223,17 @@ def reset_demo_transactions(user_id, days=30):
     for tx_data in mock_transactions:
         transaction = Transaction(
             id=tx_data.get("id", f"tx_{uuid.uuid4().hex}"),
-            user_id=user_id,
+            userId=user_id,
             amount=tx_data.get("amount", 0),
             date=tx_data.get("date", datetime.now().strftime("%Y-%m-%d")),
-            merchant_name=tx_data.get("merchant_name", "Unknown"),
-            payment_channel=tx_data.get("payment_channel", ""),
+            merchantName=tx_data.get("merchant_name", "Unknown"),
+            paymentChannel=tx_data.get("payment_channel", ""),
             pending=tx_data.get("pending", False),
             category=tx_data.get("category", {}).get("id", "other"),
             subcategory=tx_data.get("category", {}).get("subcategory", {}).get("id", "unknown"),
-            is_test_data=True,
-            is_manual=False,
-            raw_data=json.dumps(tx_data)
+            isTestData=True,
+            isManual=False,
+            rawData=json.dumps(tx_data)
         )
         db.session.add(transaction)
     

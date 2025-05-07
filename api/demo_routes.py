@@ -13,7 +13,8 @@ def toggle_demo_mode_api():
     try:
         data = request.json
         enable_demo = data.get('enable_demo', True)
-        user_id = data.get('user_id')
+        # Accepter soit userId soit user_id (pour compatibilité avec le frontend)
+        user_id = data.get('userId') or data.get('user_id')
         
         if not user_id:
             return jsonify({"error": "User ID is required"}), 400
@@ -38,7 +39,8 @@ def reset_test_transactions_api():
     """
     try:
         data = request.json
-        user_id = data.get('user_id')
+        # Accepter soit userId soit user_id (pour compatibilité avec le frontend)
+        user_id = data.get('userId') or data.get('user_id')
         
         if not user_id:
             return jsonify({"error": "User ID is required"}), 400

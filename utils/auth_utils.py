@@ -28,14 +28,20 @@ def require_valid_user(view_function):
     def wrapper(*args, **kwargs):
         try:
             # Extraire l'ID utilisateur de la requête JSON
-            user_id = request.json.get('user_id')
+            # Accepter soit userId soit user_id (pour compatibilité avec le frontend)
+            user_id = request.json.get('userId') or request.json.get('user_id')
             
             if not user_id:
                 return jsonify({"error": "User ID is required"}), 400
                 
             # Vérifier si l'utilisateur existe
             if not verify_user_exists(user_id):
-                return jsonify({"error": "User not found"}), 404
+                # Pour le mode démo, autoriser le user_id 'demo-user' sans vérification
+                if user_id == "demo-user":
+                    # Mode spécial pour permettre les tests sans authentification
+                    pass  # Autoriser la requête
+                else:
+                    return jsonify({"error": "User not found"}), 404
                 
             # Si l'utilisateur existe, continuer le traitement
             return view_function(*args, **kwargs)

@@ -18,7 +18,11 @@ def get_transactions_api():
     """
     try:
         # Récupérer et valider les paramètres requis
-        user_id = request.json.get('user_id')
+        # Accepter soit userId soit user_id (pour compatibilité avec le frontend)
+        user_id = request.json.get('userId') or request.json.get('user_id')
+        
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
         
         # Récupérer le paramètre days s'il est fourni
         days = request.json.get('days', 30)  # Valeur par défaut: 30
@@ -40,7 +44,12 @@ def add_transaction_api():
     """
     try:
         # Récupérer les paramètres
-        user_id = request.json.get('user_id')
+        # Accepter soit userId soit user_id (pour compatibilité avec le frontend)
+        user_id = request.json.get('userId') or request.json.get('user_id')
+        
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
+        
         transaction_data = request.json.get('transaction')
         
         if not transaction_data:
