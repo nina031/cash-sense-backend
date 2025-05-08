@@ -25,40 +25,32 @@ class Transaction(db.Model):
     """
     Modèle pour stocker les transactions de test ou manuelles
     """
-    __tablename__ = 'Transaction'  # Nom de table tel que défini par Prisma (avec majuscule)
+    __tablename__ = 'Transaction'
     
     id = db.Column(db.String(36), primary_key=True)
     date = db.Column(db.String(10), nullable=False)
-    merchantName = db.Column(db.String(100))  # Adaptez les noms de champs à ceux de Prisma
+    merchantName = db.Column(db.String(100))
     amount = db.Column(db.Float, nullable=False)
     paymentChannel = db.Column(db.String(50))
     pending = db.Column(db.Boolean, default=False)
     
-    userId = db.Column(db.String(36), db.ForeignKey('User.id'), nullable=False)  # Avec majuscule pour User
+    userId = db.Column(db.String(36), db.ForeignKey('User.id'), nullable=False)
     category = db.Column(db.String(100))
     subcategory = db.Column(db.String(100))
     
     isTestData = db.Column(db.Boolean, default=False)
     isManual = db.Column(db.Boolean, default=False)
     
-    rawData = db.Column(db.Text, nullable=True)
-    
     createdAt = db.Column(db.DateTime, default=datetime.utcnow)
     updatedAt = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    
     def to_dict(self):
         """Convertit le modèle en dictionnaire pour l'API"""
-        if self.rawData:
-            # Si nous avons des données brutes stockées, les utiliser
-            return json.loads(self.rawData)
-        
-        # Sinon, construire un dictionnaire à partir des champs individuels
         return {
             "id": self.id,
             "date": self.date,
             "amount": self.amount,
-            "merchant_name": self.merchantName,  # Correspondance avec le nom du champ dans la BD
+            "merchant_name": self.merchantName,
             "payment_channel": self.paymentChannel or ("online" if self.amount < 0 else "in store"),
             "pending": self.pending,
             "category": {
@@ -67,6 +59,6 @@ class Transaction(db.Model):
                     "id": self.subcategory
                 }
             },
-            "is_test_data": self.isTestData,  # Correspondance avec le nom du champ dans la BD
-            "is_manual": self.isManual  # Correspondance avec le nom du champ dans la BD
+            "is_test_data": self.isTestData,
+            "is_manual": self.isManual
         }

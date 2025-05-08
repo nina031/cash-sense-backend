@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from services.mode_service import is_demo_mode
 from utils.mock_data import get_mock_transactions
 from utils.transaction_validator import format_transaction
+from utils.category_utils import extract_category_data
 from db_models import db, Transaction
 import json
 import uuid
@@ -63,6 +64,8 @@ def get_demo_transactions(user_id, days=30):
         
         # Stocker les transactions dans la base de données
         for tx_data in mock_transactions:
+            category_id, subcategory_id = extract_category_data(tx_data)
+            
             # Créer une nouvelle transaction
             transaction = Transaction(
                 id=tx_data.get("id", f"tx_{uuid.uuid4().hex}"),
@@ -72,11 +75,10 @@ def get_demo_transactions(user_id, days=30):
                 merchantName=tx_data.get("merchant_name", "Unknown"),
                 paymentChannel=tx_data.get("payment_channel", ""),
                 pending=tx_data.get("pending", False),
-                category=tx_data.get("category", {}).get("id", "other"),
-                subcategory=tx_data.get("category", {}).get("subcategory", {}).get("id", "unknown"),
+                category=category_id,
+                subcategory=subcategory_id,
                 isTestData=True,
-                isManual=False,
-                rawData=json.dumps(tx_data)
+                isManual=False
             )
             db.session.add(transaction)
         
@@ -173,6 +175,8 @@ def add_transaction(user_id, transaction_data, is_test=False, is_manual=True):
     if "id" not in formatted_tx:
         formatted_tx["id"] = f"tx_{uuid.uuid4().hex}"
     
+    category_id, subcategory_id = extract_category_data(formatted_tx)
+    
     # Créer une nouvelle transaction
     transaction = Transaction(
         id=formatted_tx.get("id"),
@@ -182,11 +186,12 @@ def add_transaction(user_id, transaction_data, is_test=False, is_manual=True):
         merchantName=formatted_tx.get("merchant_name"),
         paymentChannel=formatted_tx.get("payment_channel"),
         pending=formatted_tx.get("pending", False),
-        category=formatted_tx.get("category", {}).get("id", "other"),
-        subcategory=formatted_tx.get("category", {}).get("subcategory", {}).get("id", "unknown"),
+        category=category_id,
+        subcategory=subcategory_id,
         isTestData=is_test,
-        isManual=is_manual,
-        rawData=json.dumps(formatted_tx)
+        isManual=is_manual
+        # Supprimer cette ligne
+        # rawData=json.dumps(formatted_tx)
     )
     
     # Ajouter à la base de données
@@ -221,6 +226,11 @@ def reset_demo_transactions(user_id, days=30):
     
     # Stocker les nouvelles transactions
     for tx_data in mock_transactions:
+        # Extraire les données de catégorie
+        category_id = "other"
+        subcategory_id = "unknown"
+        category_id, subcategory_id = extract_category_data(tx_data)
+        
         transaction = Transaction(
             id=tx_data.get("id", f"tx_{uuid.uuid4().hex}"),
             userId=user_id,
@@ -229,11 +239,12 @@ def reset_demo_transactions(user_id, days=30):
             merchantName=tx_data.get("merchant_name", "Unknown"),
             paymentChannel=tx_data.get("payment_channel", ""),
             pending=tx_data.get("pending", False),
-            category=tx_data.get("category", {}).get("id", "other"),
-            subcategory=tx_data.get("category", {}).get("subcategory", {}).get("id", "unknown"),
+            category=category_id,
+            subcategory=subcategory_id,
             isTestData=True,
-            isManual=False,
-            rawData=json.dumps(tx_data)
+            isManual=False
+            # Supprimer cette ligne
+            # rawData=json.dumps(tx_data)
         )
         db.session.add(transaction)
     
