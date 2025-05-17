@@ -2,7 +2,7 @@
 Service de gestion des transactions (manuelles et de test)
 """
 from datetime import datetime, timedelta
-from services.mode_service import is_demo_mode
+from services.mode_service import get_current_mode
 from utils.mock_data import get_mock_transactions
 from utils.transaction_validator import format_transaction
 from utils.category_utils import extract_category_data
@@ -31,11 +31,15 @@ def get_transactions(user_id, days=30):
         print("Erreur: Tentative d'accès aux transactions sans ID utilisateur")
         raise ValueError("L'ID utilisateur est requis pour accéder aux transactions")
     
-    if is_demo_mode():
-        # Récupérer les transactions de test
+    # Selon le mode, récupérer les transactions appropriées
+    current_mode = get_current_mode()
+    print(f"Mode actuel: {current_mode}")
+    
+    if current_mode == 'demo':
+        # Mode démo - récupérer les transactions de test
         return get_demo_transactions(user_id, days)
-    else :
-    # Mode prod - récupérer les transactions manuelles depuis la base de données
+    else:
+        # Mode prod - récupérer les transactions manuelles depuis la base de données
         return get_manual_transactions(user_id, days)
 
 def get_demo_transactions(user_id, days=30):
