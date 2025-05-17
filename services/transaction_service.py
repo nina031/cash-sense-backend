@@ -168,12 +168,12 @@ def add_transaction(user_id, transaction_data, is_test=False, is_manual=True):
     if not user_id:
         raise ValueError("L'ID utilisateur est requis")
     
+    # Créer un ID si non fourni
+    if "id" not in transaction_data:
+        transaction_data["id"] = f"tx_{uuid.uuid4().hex}"
+
     # Valider et formater la transaction
     formatted_tx = format_transaction(transaction_data)
-    
-    # Créer un ID si non fourni
-    if "id" not in formatted_tx:
-        formatted_tx["id"] = f"tx_{uuid.uuid4().hex}"
     
     category_id, subcategory_id = extract_category_data(formatted_tx)
     
@@ -190,8 +190,6 @@ def add_transaction(user_id, transaction_data, is_test=False, is_manual=True):
         subcategory=subcategory_id,
         isTestData=is_test,
         isManual=is_manual
-        # Supprimer cette ligne
-        # rawData=json.dumps(formatted_tx)
     )
     
     # Ajouter à la base de données
